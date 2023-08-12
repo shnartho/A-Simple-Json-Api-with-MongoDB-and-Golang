@@ -1,4 +1,4 @@
-#### A simple json api with MongoDB and Golang that fetches cat facts from "https://catfact.ninja/fact" store in mongodb database and server in localhost port 3000.
+#### The goal of this project is to create a program that fetches random cat facts from an external API, stores them in a MongoDB database, and provides a simple HTTP server to access these facts.
 
 #### install mongodb with docker
 ```
