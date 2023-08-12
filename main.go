@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -53,7 +52,7 @@ func NewCatFactWorker(c *mongo.Client) *CatFactWorker {
 }
 
 func (cfw *CatFactWorker) start() error {
-	//coll := cfw.client.Database("catfact").Collection("facts")
+	coll := cfw.client.Database("catfact").Collection("facts")
 	ticker := time.NewTicker(2 * time.Second)
 
 	for {
@@ -65,7 +64,12 @@ func (cfw *CatFactWorker) start() error {
 		if err := json.NewDecoder(resp.Body).Decode(&catFact); err != nil {
 			return err
 		}
-		fmt.Println(catFact)
+
+		_, err = coll.InsertOne(context.TODO(), catFact)
+		if err != nil {
+			return err
+		}
+
 		<-ticker.C
 	}
 }
@@ -75,6 +79,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
 	worker := NewCatFactWorker(client)
 	go worker.start()
 
