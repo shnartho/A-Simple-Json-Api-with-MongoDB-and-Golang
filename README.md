@@ -1,19 +1,26 @@
-A simple json api with MongoDB and Golang
+#### A simple json api with MongoDB and Golang that fetches cat facts from "https://catfact.ninja/fact" store in mongodb database and server in localhost port 3000.
 
-#install mongodb with docker
+#### install mongodb with docker
 ```
 docker run --name some-mongo -p 27017:27017 -d mongo
 ```
+![docker](./images/mongoContainer.png)
 
-### Go dependencies
+#### Go dependencies
 ```
 go get go.mongodb.org/mongo-driver/mongo
 go get go.mongodb.org/mongo-driver/bson
 ```
 
-### Mongo Golang quickstart 
+#### Mongo Golang quickstart 
 ```
 client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
 if err != nil {
     panic(err)
 ```
+
+### Run the project
+```
+go run main.go
+```
+![API](./images/API.png) 
