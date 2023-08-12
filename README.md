@@ -1,6 +1,6 @@
-#### The goal of this project is to create a program that fetches random cat facts from an external API, stores them in a MongoDB database, and provides a simple HTTP server to access these facts.
+#### The goal of this project is to create a program that fetches random cat facts from an external API, stores them in a MongoDB database, and provides a simple HTTP server to access these facts. <img src="https://raw.githubusercontent.com/meSingh/getting-started-with-golang/master/gopher.png" width="15" height="22" alt="Golang logo">
 
-#### install mongodb with docker
+#### Install mongodb with docker🐟
 ```
 docker run --name some-mongo -p 27017:27017 -d mongo
 ```
@@ -19,7 +19,7 @@ if err != nil {
     panic(err)
 ```
 
-### Run the project
+#### Run the project
 ```
 go run main.go
 ```
