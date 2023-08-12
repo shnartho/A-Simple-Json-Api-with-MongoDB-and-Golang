@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -11,6 +12,35 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+type Server struct {
+	client *mongo.Client
+}
+
+func NewServer(c *mongo.Client) *Server {
+	return &Server{
+		client: c,
+	}
+}
+
+func (s *Server) handleGetAllFacts(w http.ResponseWriter, r *http.Request) {
+	coll := s.client.Database("catfact").Collection("facts")
+
+	query := bson.M{}
+	cursor, err := coll.Find(context.TODO(), query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	results := []bson.M{}
+	if err = cursor.All(context.TODO(), &results); err != nil {
+		log.Fatal(err)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(results)
+}
 
 type CatFactWorker struct {
 	client *mongo.Client
@@ -46,5 +76,9 @@ func main() {
 		panic(err)
 	}
 	worker := NewCatFactWorker(client)
-	worker.start()
+	go worker.start()
+
+	server := NewServer(client)
+	http.HandleFunc("/facts", server.handleGetAllFacts)
+	http.ListenAndServe(":3000", nil)
 }
